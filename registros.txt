@@ -1,0 +1,4 @@
+# Registros de personas
+
+## Estado: Distrito Capital
+- 2026-06-25T18:51:41.860Z | Tipo: cedula | Cédula: V17856045 | Nombre: Adriana Bastidas | Salud: Estable | Ubicación: Hospital Perez Carreno

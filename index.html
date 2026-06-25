@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Apex Dev & Security: servicios de desarrollo de software, automatizaciones con IA y consultoría en ciberseguridad." />
+  <title>Apex Dev & Security</title>
+  <link rel="icon" type="image/png" href="isotipo_color.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand">
+        <img src="logotipo_completo_color.png" alt="Apex Dev & Security" class="brand-logo" />
+        <div>
+          <p class="eyebrow">Apex Dev & Security</p>
+          <p class="micro">Software. IA. Ciberseguridad.</p>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="#registro">SOS Emergencia</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#marca">Marca</a>
+        <a href="#equipo">Equipo</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="inicio">
+        <div class="hero-copy">
+          <p class="hero-pretitle">Donde la confianza tecnológica se convierte en resultados.</p>
+          <h1>Construimos <span id="dynamic-term">estrategias</span> digitales que operan con inteligencia y seguridad.</h1>
+          <p class="hero-text">
+            Basado en la energía visual del logo de Apex, cada sección de este sitio refleja una propuesta de valor clara:
+            innovación ágil, automatización inteligente y protección robusta.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#servicios">Explorar servicios</a>
+            <a class="button secondary" href="#equipo">Conocer al equipo</a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-card">
+            <img src="isotipo_color.png" alt="Isotipo Apex" class="hero-logo" />
+            <div class="hero-card-copy">
+              <p>Una marca que comunica:</p>
+              <ul>
+                <li>Precisión técnica</li>
+                <li>Inteligencia artificial como motor</li>
+                <li>Seguridad como ventaja competitiva</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="registro-section" id="registro">
+        <div class="section-heading">
+          <p class="eyebrow">SOS emergencia en Venezuela</p>
+          <h2>Registro responsable y organizado por estados</h2>
+          <p>Ayudemos a reunir familias. Esta sección funciona como un índice de apoyo para la comunidad. Los listados están organizados por estado para facilitar la búsqueda y la coordinación. Por favor, cargue la información con responsabilidad, veracidad y cuidado.</p>
+        </div>
+
+        <div class="github-config-card">
+          <h3>Configuración de GitHub</h3>
+          <p>Complete estos datos para que cada envío cree o actualice un archivo de texto en su repositorio con un commit automático. El token no se guarda en el repositorio y debe ingresarse solo de forma temporal.</p>
+          <div class="config-grid">
+            <label>
+              Token de acceso personal
+              <input type="password" id="github-token" placeholder="Ingresa tu token solo en esta sesión" />
+            </label>
+            <label>
+              Usuario del repositorio
+              <input type="text" id="github-owner" value="adjgp" />
+            </label>
+            <label>
+              Nombre del repositorio
+              <input type="text" id="github-repo" placeholder="repo-name" />
+            </label>
+            <label>
+              Rama
+              <input type="text" id="github-branch" value="main" />
+            </label>
+            <label>
+              Ruta del archivo
+              <input type="text" id="github-file" value="registros.txt" />
+            </label>
+            <label>
+              Mensaje del commit
+              <input type="text" id="github-message" value="Actualizar registros desde formulario" />
+            </label>
+          </div>
+        </div>
+
+        <div class="registro-form-card">
+          <form class="registro-form" id="registro-form-main">
+            <label>
+              Estado
+              <select id="form-estado" name="estado" required></select>
+            </label>
+            <label>
+              Tipo de identificación
+              <select name="tipo" required>
+                <option value="cedula">Cédula</option>
+                <option value="menor">Menor de edad</option>
+                <option value="sin-identificacion">Sin identificación</option>
+              </select>
+            </label>
+            <label class="field-cedula">
+              Cédula
+              <input type="text" name="cedula" placeholder="Ej. V-12345678" />
+            </label>
+            <label>
+              Nombre y apellido
+              <input type="text" name="nombre" placeholder="Ingrese nombre y apellido" required />
+            </label>
+            <label>
+              Estado de salud
+              <select name="salud" required>
+                <option value="Estable">Estable</option>
+                <option value="Observación">Observación</option>
+                <option value="Urgente">Urgente</option>
+              </select>
+            </label>
+            <label>
+              Ubicación
+              <input type="text" name="ubicacion" placeholder="Ingrese la ubicación" required />
+            </label>
+            <button class="button primary" type="submit">Guardar registro</button>
+          </form>
+        </div>
+
+        <div class="state-list-card">
+          <div class="state-list-heading">
+            <h3>Estados disponibles</h3>
+            <p>Seleccione un estado para leer los registros almacenados en el archivo de GitHub.</p>
+          </div>
+          <div id="estado-tabs" class="state-tabs" role="tablist" aria-label="Estados de Venezuela"></div>
+          <div id="registro-feedback" class="registro-feedback" role="status" aria-live="polite"></div>
+          <div class="registro-resumen">
+            <h3 id="estado-actual-label">Registros para: Amazonas</h3>
+            <ul id="registro-entries" class="registro-entries"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="services" id="servicios">
+        <div class="section-heading">
+          <p class="eyebrow">Servicios Apex</p>
+          <h2>Hacemos real tu transformación digital</h2>
+          <p>Entregamos soluciones adaptadas a cada etapa: desde productos digitales hasta automatizaciones inteligentes y arquitecturas seguras.</p>
+        </div>
+        <div class="cards-grid">
+          <article class="card">
+            <div class="card-icon">💻</div>
+            <h3>Desarrollo de software</h3>
+            <p>Construcción ágil de aplicaciones web y móviles con experiencia en usabilidad, rendimiento y escalabilidad.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🤖</div>
+            <h3>Automatizaciones con IA</h3>
+            <p>Integración de sistemas inteligentes que optimizan procesos, reducen tiempos y generan información accionable.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🛡️</div>
+            <h3>Consultoría en ciberseguridad</h3>
+            <p>Evaluaciones de riesgo, controles de defensa y estrategias de protección para mantener tu empresa segura.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="brand-story" id="marca">
+        <div class="section-heading">
+          <p class="eyebrow">Nuestra identidad</p>
+          <h2>El mensaje que transmite nuestro logo</h2>
+        </div>
+        <div class="brand-grid">
+          <div class="brand-copy">
+            <p>El isologo de Apex combina un sombrero de hacker estilizado con gafas tecnológicas. Su lenguaje visual inspira:</p>
+            <ul>
+              <li><strong>Protección estratégica:</strong> la seguridad está en el corazón de cada solución.</li>
+              <li><strong>Visión inteligente:</strong> la automatización con IA impulsa decisiones más ágiles.</li>
+              <li><strong>Actitud moderna:</strong> el desarrollo de software se ejecuta con diseño profesional y ritmo dinámico.</li>
+            </ul>
+          </div>
+          <div class="brand-image">
+            <img src="logotipo_monocromatico.png" alt="Apex Dev & Security monocromático" />
+          </div>
+        </div>
+      </section>
+
+      <section class="team" id="equipo">
+        <div class="section-heading">
+          <p class="eyebrow">Equipo Apex</p>
+          <h2>Detrás de la marca</h2>
+          <p>De momento, el equipo se representa a través del contacto directo en LinkedIn. Conecta para descubrir nuestra experiencia y visión estratégica.</p>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">
+            <img src="isotipo_bn.png" alt="Avatar del equipo Apex" />
+          </div>
+          <div class="team-info">
+            <h3>Consultor principal</h3>
+            <p>Especialista en soluciones TI, automatización inteligente y ciberseguridad empresarial.</p>
+            <a class="button primary" href="https://www.linkedin.com/in/adjgp/" target="_blank" rel="noreferrer noopener">Visitar LinkedIn</a>
+            <p class="note">Enlace actualizado al perfil de LinkedIn de contacto.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>© 2026 Apex Dev & Security. Desarrollamos software, automatizamos con IA y defendemos tu negocio.</p>
+    </footer>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

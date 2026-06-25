@@ -1,0 +1,2205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Marca — Apex Dev &amp; Security</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});"></script>
+<style>
+/* ============================
+   PAGE SETUP
+   ============================ */
+@page {
+  size: A4;
+  margin: 0;
+}
+@page :first {
+  margin: 0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5pt;
+  color: #1a1a2e;
+  background: #ffffff;
+  string-set: doctitle "";
+}
+
+pre, table, figure, img, svg, blockquote, code {
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+}
+pre { overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+figure img { max-width: 100%; height: auto; }
+a { word-break: break-all; }
+.katex-display { overflow-x: auto; max-width: 100%; }
+
+/* ============================
+   PORTADA
+   ============================ */
+.cover {
+  width: 210mm;
+  height: 297mm;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  page-break-after: always;
+  background: #000000;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cover-bg-grid {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image:
+    linear-gradient(rgba(0,102,255,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,102,255,0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+  z-index: 0;
+}
+
+.cover-glow-top {
+  position: absolute;
+  top: -80px; left: 50%;
+  transform: translateX(-50%);
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(0,102,255,0.35) 0%, transparent 70%);
+  z-index: 0;
+}
+
+.cover-glow-bottom {
+  position: absolute;
+  bottom: -80px; right: -80px;
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(0,255,255,0.18) 0%, transparent 70%);
+  z-index: 0;
+}
+
+.cover-line-top {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #0066FF, #00FFFF, #0066FF);
+  z-index: 1;
+}
+
+.cover-line-bottom {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #0066FF, #00FFFF, #0066FF);
+  z-index: 1;
+}
+
+.cover-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 40px;
+}
+
+.cover-logo-img {
+  width: 340px;
+  max-width: 80%;
+  height: auto;
+  margin-bottom: 40px;
+}
+
+.cover-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 11pt;
+  font-weight: 600;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: #00FFFF;
+  margin-bottom: 16px;
+}
+
+.cover-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 38pt;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 16px;
+  line-height: 1.15;
+  letter-spacing: 1px;
+  string-set: doctitle "";
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.cover-title span {
+  color: #0066FF;
+}
+
+.cover-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 13pt;
+  font-weight: 300;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 2px;
+  margin-top: 8px;
+}
+
+.cover-divider {
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, #0066FF, #00FFFF);
+  margin: 28px auto;
+}
+
+.cover-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8pt;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 1.5px;
+  margin-top: 40px;
+}
+
+/* ============================
+   INNER PAGES
+   ============================ */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 2cm 2cm 2.5cm 2cm;
+  position: relative;
+  page-break-after: always;
+  background: #ffffff;
+}
+
+.page-dark {
+  background: #050914;
+  color: #ffffff;
+}
+
+/* Header bar for inner pages */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.page-header-dark {
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.page-header-logo {
+  height: 28px;
+  width: auto;
+}
+
+.page-header-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.page-header-title-dark {
+  color: rgba(255,255,255,0.35);
+}
+
+/* Section heading style */
+.section-tag {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 8.5pt;
+  font-weight: 700;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: #0066FF;
+  margin-bottom: 6px;
+}
+
+.section-tag-cyan {
+  color: #00CCDD;
+}
+
+.section-heading {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 26pt;
+  font-weight: 700;
+  color: #050914;
+  line-height: 1.1;
+  margin: 0 0 8px;
+}
+
+.section-heading-white {
+  color: #ffffff;
+}
+
+.section-lead {
+  font-size: 11pt;
+  font-weight: 400;
+  color: #555;
+  line-height: 1.65;
+  margin-bottom: 14px;
+  max-width: 95%;
+}
+
+.section-lead-white {
+  color: rgba(255,255,255,0.7);
+}
+
+/* Accent rule under section heading */
+.accent-rule {
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, #0066FF, #00FFFF);
+  margin-bottom: 12px;
+  border-radius: 2px;
+}
+
+/* ============================
+   INTRODUCCIÓN
+   ============================ */
+.intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.intro-card {
+  background: #f7f9ff;
+  border-left: 3px solid #0066FF;
+  border-radius: 0 6px 6px 0;
+  padding: 18px 20px;
+}
+
+.intro-card-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13pt;
+  font-weight: 700;
+  color: #0066FF;
+  margin: 0 0 8px;
+}
+
+.intro-card-text {
+  font-size: 9.5pt;
+  color: #444;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.intro-values {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.intro-value {
+  text-align: center;
+  padding: 16px 10px;
+  background: linear-gradient(135deg, #000814 0%, #0d1b3e 100%);
+  border-radius: 8px;
+  color: #fff;
+}
+
+.intro-value-icon {
+  font-size: 20pt;
+  margin-bottom: 8px;
+  display: block;
+  color: #00FFFF;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+}
+
+.intro-value-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 9.5pt;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.8);
+}
+
+/* ============================
+   LOGO SECTIONS
+   ============================ */
+.logo-showcase {
+  background: #f5f7ff;
+  border-radius: 10px;
+  padding: 32px;
+  text-align: center;
+  margin: 20px 0;
+  border: 1px solid #e0e8ff;
+}
+
+.logo-showcase-dark {
+  background: #050914;
+  border: 1px solid rgba(0,102,255,0.3);
+}
+
+.logo-showcase img {
+  max-width: 80%;
+  max-height: 140px;
+  height: auto;
+  width: auto;
+}
+
+.logo-specs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.logo-spec-item {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  padding: 14px;
+  text-align: center;
+}
+
+.logo-spec-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11pt;
+  font-weight: 600;
+  color: #0066FF;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.logo-spec-label {
+  font-size: 8pt;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Spacing diagram */
+.spacing-diagram {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 22px 0;
+  padding: 24px;
+  background: #f5f7ff;
+  border: 1px solid #dde5ff;
+  border-radius: 8px;
+}
+
+.spacing-diagram img {
+  max-height: 80px;
+  width: auto;
+}
+
+.spacing-marker {
+  position: absolute;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7.5pt;
+  color: #0066FF;
+  font-weight: 600;
+}
+
+.spacing-marker.top { top: 6px; left: 50%; transform: translateX(-50%); }
+.spacing-marker.bottom { bottom: 6px; left: 50%; transform: translateX(-50%); }
+.spacing-marker.left { left: 8px; top: 50%; transform: translateY(-50%); }
+.spacing-marker.right { right: 8px; top: 50%; transform: translateY(-50%); }
+
+/* Isotipo */
+.isotipo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.isotipo-box {
+  border-radius: 10px;
+  padding: 18px;
+  text-align: center;
+}
+
+.isotipo-box.light {
+  background: #f5f7ff;
+  border: 1px solid #e0e8ff;
+}
+
+.isotipo-box.dark {
+  background: #050914;
+  border: 1px solid rgba(0,102,255,0.3);
+}
+
+.isotipo-box img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.isotipo-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 9pt;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 12px;
+}
+
+.isotipo-label.dark { color: rgba(255,255,255,0.5); }
+.isotipo-label.light-label { color: #555; }
+
+.isotipo-features {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 12px;
+  background: #f7f9ff;
+  border-radius: 6px;
+  border-left: 3px solid #0066FF;
+}
+
+.feature-dot {
+  width: 8px;
+  height: 8px;
+  background: #0066FF;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.feature-text {
+  font-size: 9.5pt;
+  color: #333;
+  line-height: 1.5;
+}
+
+.feature-text strong {
+  display: block;
+  font-weight: 600;
+  color: #050914;
+  margin-bottom: 2px;
+}
+
+/* ============================
+   COLOR PALETTE
+   ============================ */
+.color-swatches {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin: 24px 0;
+}
+
+.color-swatch {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.swatch-color {
+  height: 110px;
+  width: 100%;
+}
+
+.swatch-info {
+  padding: 14px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+}
+
+.swatch-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12pt;
+  font-weight: 700;
+  color: #050914;
+  margin: 0 0 8px;
+}
+
+.swatch-code {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.code-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.code-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 7.5pt;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: 1px;
+  min-width: 38px;
+}
+
+.code-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5pt;
+  color: #222;
+  font-weight: 500;
+}
+
+.color-usage-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 9.5pt;
+}
+
+.color-usage-table th {
+  background: #050914;
+  color: #fff;
+  padding: 10px 14px;
+  text-align: left;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 9pt;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.color-usage-table td {
+  padding: 9px 14px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+  line-height: 1.5;
+  vertical-align: top;
+}
+
+.color-usage-table tr:nth-child(even) td {
+  background: #f7f9ff;
+}
+
+.color-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* ============================
+   TYPOGRAPHY
+   ============================ */
+.typo-section {
+  margin-bottom: 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.typo-header {
+  background: #050914;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.typo-role {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #00FFFF;
+}
+
+.typo-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12pt;
+  font-weight: 700;
+  color: #fff;
+}
+
+.typo-body {
+  padding: 12px 16px;
+  background: #fff;
+}
+
+.typo-sample-heading {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  color: #050914;
+  margin: 0 0 6px;
+  line-height: 1.2;
+}
+
+.typo-sample-body {
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5pt;
+  color: #444;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.typo-sample-mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5pt;
+  color: #0066FF;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.typo-sizes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.typo-size-item {
+  background: #f7f9ff;
+  border-radius: 5px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.typo-size-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7.5pt;
+  color: #0066FF;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.typo-size-name {
+  font-size: 8pt;
+  color: #666;
+}
+
+/* ============================
+   LOGO VERSIONS
+   ============================ */
+.versions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.version-card {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+}
+
+.version-preview {
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 90px;
+}
+
+.version-preview.light-bg { background: #f5f7ff; }
+.version-preview.dark-bg { background: #050914; }
+.version-preview.white-bg { background: #ffffff; }
+.version-preview.mid-bg { background: #e8eaf0; }
+
+.version-preview img {
+  max-height: 55px;
+  max-width: 90%;
+  width: auto;
+  object-fit: contain;
+}
+
+.version-info {
+  padding: 12px 16px;
+  background: #fff;
+  border-top: 1px solid #eee;
+}
+
+.version-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 11pt;
+  font-weight: 700;
+  color: #050914;
+  margin: 0 0 3px;
+}
+
+.version-desc {
+  font-size: 8.5pt;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ============================
+   DOS AND DON'TS
+   ============================ */
+.dos-donts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+.check-item.correct {
+  background: #f0fff4;
+  border-left: 3px solid #00b84c;
+}
+
+.check-item.wrong {
+  background: #fff5f5;
+  border-left: 3px solid #e53e3e;
+}
+
+.check-icon {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13pt;
+  font-weight: 700;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.check-icon.correct { color: #00b84c; }
+.check-icon.wrong { color: #e53e3e; }
+
+.check-text {
+  font-size: 9.5pt;
+  color: #333;
+  line-height: 1.5;
+}
+
+.check-text strong {
+  display: block;
+  font-weight: 600;
+  color: #050914;
+  margin-bottom: 1px;
+}
+
+/* Incorrect usage examples */
+.incorrect-examples {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.incorrect-card {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid #e53e3e;
+}
+
+.incorrect-preview {
+  background: #fff8f8;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72px;
+  position: relative;
+}
+
+.incorrect-preview img {
+  max-height: 40px;
+  max-width: 90%;
+  width: auto;
+  object-fit: contain;
+}
+
+.incorrect-preview.stretched img {
+  transform: scaleX(1.5);
+}
+
+.incorrect-preview.rotated img {
+  transform: rotate(25deg);
+}
+
+.incorrect-preview.pixelated img {
+  image-rendering: pixelated;
+  width: 36px;
+  height: 24px;
+  max-height: none;
+}
+
+.incorrect-preview.low-contrast {
+  background: #ddd;
+}
+
+.incorrect-preview.low-contrast img {
+  opacity: 0.25;
+}
+
+.incorrect-preview.framed img {
+  border: 3px solid red;
+  padding: 2px;
+}
+
+.incorrect-x {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14pt;
+  font-weight: 700;
+  color: #e53e3e;
+  line-height: 1;
+}
+
+.incorrect-label {
+  background: #e53e3e;
+  color: #fff;
+  padding: 7px 10px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 8.5pt;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* ============================
+   APPLICATIONS / MOCKUPS
+   ============================ */
+
+/* Business Card Mockup */
+.bizcard-container {
+  display: flex;
+  gap: 20px;
+  margin: 24px 0;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.bizcard {
+  width: 180px;
+  height: 100px;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+}
+
+.bizcard.front {
+  background: linear-gradient(135deg, #000814 0%, #001440 60%, #000814 100%);
+}
+
+.bizcard.back {
+  background: #000000;
+  border: 1px solid rgba(0,102,255,0.4);
+}
+
+.bizcard-grid {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image:
+    linear-gradient(rgba(0,102,255,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,102,255,0.07) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+
+.bizcard-line {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #0066FF, #00FFFF);
+}
+
+.bizcard-content {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.bizcard-logo {
+  height: 18px;
+  width: auto;
+  object-fit: contain;
+  object-position: left;
+}
+
+.bizcard-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 10pt;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.bizcard-role {
+  font-family: 'Inter', sans-serif;
+  font-size: 6pt;
+  font-weight: 400;
+  color: #00FFFF;
+  letter-spacing: 1px;
+}
+
+.bizcard-contact {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 5.5pt;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.6;
+}
+
+.bizcard-back-logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.bizcard-back-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Letterhead Mockup */
+.letterhead-mockup {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  margin: 20px auto;
+  max-width: 340px;
+}
+
+.letterhead-header {
+  background: #050914;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.letterhead-header img {
+  height: 22px;
+  width: auto;
+}
+
+.letterhead-header-line {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 6pt;
+  color: rgba(255,255,255,0.35);
+}
+
+.letterhead-body {
+  background: #fff;
+  padding: 16px 20px 20px;
+}
+
+.letterhead-date {
+  font-family: 'Inter', sans-serif;
+  font-size: 7pt;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.letterhead-text-line {
+  height: 5px;
+  background: #eee;
+  border-radius: 3px;
+  margin-bottom: 7px;
+}
+
+.letterhead-text-line.short { width: 60%; }
+.letterhead-text-line.medium { width: 80%; }
+.letterhead-text-line.long { width: 95%; }
+
+.letterhead-footer {
+  background: linear-gradient(90deg, #0066FF, #00FFFF);
+  height: 3px;
+}
+
+/* Web header mockup */
+.web-mockup {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  margin: 20px 0;
+}
+
+.web-browser-bar {
+  background: #2d2d2d;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.web-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.web-dot.red { background: #ff5f57; }
+.web-dot.yellow { background: #febc2e; }
+.web-dot.green { background: #28c840; }
+
+.web-url {
+  background: #3d3d3d;
+  border-radius: 3px;
+  padding: 2px 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 6.5pt;
+  color: rgba(255,255,255,0.5);
+  margin-left: 6px;
+  flex: 1;
+}
+
+.web-nav {
+  background: #050914;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0,102,255,0.3);
+}
+
+.web-nav img {
+  height: 18px;
+  width: auto;
+}
+
+.web-nav-items {
+  display: flex;
+  gap: 14px;
+}
+
+.web-nav-item {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 7.5pt;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.5px;
+}
+
+.web-nav-item.active { color: #00FFFF; }
+
+.web-cta {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 7pt;
+  font-weight: 700;
+  background: #0066FF;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+}
+
+.web-hero {
+  background: linear-gradient(135deg, #000814 0%, #001440 100%);
+  padding: 24px 16px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.web-hero-grid {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image:
+    linear-gradient(rgba(0,102,255,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,102,255,0.07) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.web-hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.web-hero-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13pt;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 6px;
+}
+
+.web-hero-title span { color: #00FFFF; }
+
+.web-hero-sub {
+  font-size: 7.5pt;
+  color: rgba(255,255,255,0.55);
+  margin: 0 0 12px;
+}
+
+.web-hero-btn {
+  display: inline-block;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 7.5pt;
+  font-weight: 700;
+  background: #0066FF;
+  color: #fff;
+  padding: 5px 14px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+/* ============================
+   UTILITY
+   ============================ */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.callout {
+  background: linear-gradient(135deg, #000814, #001440);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 12px 0;
+  color: #fff;
+}
+
+.callout-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #00FFFF;
+  margin-bottom: 6px;
+}
+
+.callout-text {
+  font-size: 9.5pt;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.tag {
+  display: inline-block;
+  background: rgba(0,102,255,0.12);
+  border: 1px solid rgba(0,102,255,0.3);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8pt;
+  color: #0066FF;
+  margin: 2px;
+}
+
+.page-number-label {
+  position: absolute;
+  bottom: 1cm;
+  right: 2cm;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8pt;
+  color: #aaa;
+}
+
+.page-number-label-dark {
+  color: rgba(255,255,255,0.25);
+}
+
+.clearance-diagram {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.clearance-diagram img {
+  max-width: 55%;
+  height: auto;
+  padding: 24px;
+  box-shadow: 0 0 0 1.5px #0066FF, 0 0 0 24px rgba(0,102,255,0.07), 0 0 0 26px #0066FF;
+  background: #f5f7ff;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.clearance-note {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8pt;
+  color: #0066FF;
+  margin-top: 12px;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     PORTADA
+     ============================================================ -->
+<div class="cover">
+  <div class="cover-bg-grid"></div>
+  <div class="cover-glow-top"></div>
+  <div class="cover-glow-bottom"></div>
+  <div class="cover-line-top"></div>
+  <div class="cover-line-bottom"></div>
+
+  <div class="cover-content">
+    <img class="cover-logo-img" src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Apex Dev &amp; Security">
+
+    <div class="cover-label">Identidad de Marca</div>
+    <h1 class="cover-title">Guía de <span>Marca</span></h1>
+    <div class="cover-subtitle">Apex Dev &amp; Security</div>
+    <div class="cover-divider"></div>
+    <div class="cover-meta">VERSIÓN 1.0 &nbsp;|&nbsp; JUNIO 2026 &nbsp;|&nbsp; USO INTERNO Y CORPORATIVO</div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     ÍNDICE
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <img class="page-header-logo" src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Apex">
+    <span class="page-header-title">GUÍA DE MARCA — APEX DEV &amp; SECURITY</span>
+  </div>
+
+  <div class="section-tag">Contenido</div>
+  <h2 class="section-heading">Tabla de Contenidos</h2>
+  <div class="accent-rule"></div>
+
+  <table class="color-usage-table" style="margin-top:10px;">
+    <thead>
+      <tr><th style="width:55px;">Sección</th><th>Tema</th><th style="width:60px;text-align:right;">Página</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span style="font-family:'JetBrains Mono',monospace;color:#0066FF;font-weight:700;">01</span></td><td>Introducción a la Marca</td><td style="text-align:right;font-family:'JetBrains Mono',monospace;font-size:9pt;">3</td></tr>
+      <tr><td><span style="font-family:'JetBrains Mono',monospace;color:#0066FF;font-weight:700;">02</span></td><td>El Logotipo Completo</td><td style="text-align:right;font-family:'JetBrains Mono',monospace;font-size:9pt;">4</td></tr>
+      <tr><td><span style="font-family:'JetBrains Mono',monospace;color:#0066FF;font-weight:700;">03</span></td><td>El Isotipo</td><td style="text-align:right;font-family:'JetBrains Mono',monospace;font-size:9pt;">5</td></tr>
+      <tr><td><span style="font-family:'JetBrains Mono',monospace;color:#0066FF;font-weight:700;">04</span></td><td>Paleta de Colores</td><td style="text-align:right;font-family:'JetBrains Mono',monospace;font-size:9pt;">6</td></tr>
+      <tr><td><span style="font-family:'JetBrains Mono',monospace;color:#0066FF;font-weight:700;">05</span></td><td>Tipografías Corporativas</td><td style="text-align:right;font-family:'JetBrains Mono',monospace;font-size:9pt;">7</td></tr>
+      <tr><td><span style="font-family:'JetBrains Mono',monospace;color:#0066FF;font-weight:700;">06</span></td><td>Versiones del Logo</td><td style="text-align:right;font-family:'JetBrains Mono',monospace;font-size:9pt;">8</td></tr>
+      <tr><td><span style="font-family:'JetBrains Mono',monospace;color:#0066FF;font-weight:700;">07</span></td><td>Usos Correctos</td><td style="text-align:right;font-family:'JetBrains Mono',monospace;font-size:9pt;">9</td></tr>
+      <tr><td><span style="font-family:'JetBrains Mono',monospace;color:#0066FF;font-weight:700;">08</span></td><td>Usos Incorrectos</td><td style="text-align:right;font-family:'JetBrains Mono',monospace;font-size:9pt;">10</td></tr>
+      <tr><td><span style="font-family:'JetBrains Mono',monospace;color:#0066FF;font-weight:700;">09</span></td><td>Aplicaciones de Marca</td><td style="text-align:right;font-family:'JetBrains Mono',monospace;font-size:9pt;">11</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout" style="margin-top: 36px;">
+    <div class="callout-label">Sobre esta Guía</div>
+    <p class="callout-text">Este documento establece los lineamientos oficiales de identidad visual para <strong>Apex Dev &amp; Security</strong>. Su correcta aplicación garantiza coherencia, profesionalismo y reconocimiento de marca en todas las comunicaciones internas y externas. Todos los elementos visuales aquí presentados son propiedad exclusiva de Apex Dev &amp; Security y su uso está regulado por esta guía.</p>
+  </div>
+
+  <div class="page-number-label">02</div>
+</div>
+
+
+<!-- ============================================================
+     INTRODUCCIÓN
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <img class="page-header-logo" src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Apex">
+    <span class="page-header-title">01 — INTRODUCCIÓN</span>
+  </div>
+
+  <div class="section-tag">Sección 01</div>
+  <h2 class="section-heading">Introducción a la Marca</h2>
+  <div class="accent-rule"></div>
+
+  <p class="section-lead">
+    <strong>Apex Dev &amp; Security</strong> es una firma tecnológica especializada en el desarrollo de software de alto rendimiento y en la protección de activos digitales mediante estrategias avanzadas de ciberseguridad. Nuestra identidad visual refleja quiénes somos: innovadores, precisos, confiables y siempre a la vanguardia.
+  </p>
+
+  <p style="font-size:10pt;color:#444;line-height:1.65;margin-bottom:18px;">
+    La marca Apex Dev &amp; Security nació con el propósito de posicionarse en el ecosistema tecnológico como una referencia de excelencia técnica. El nombre "<em>Apex</em>" —que en inglés significa cima o punto máximo— comunica nuestra aspiración de llevar los proyectos de nuestros clientes al más alto nivel de calidad y seguridad.
+  </p>
+
+  <p style="font-size:10pt;color:#444;line-height:1.65;margin-bottom:22px;">
+    Esta guía de marca es el documento rector que define cómo debe presentarse Apex Dev &amp; Security ante el mundo. Cada decisión de diseño aquí documentada ha sido tomada con el objetivo de proyectar credibilidad técnica, modernidad y un carácter distinguible en el mercado.
+  </p>
+
+  <div class="intro-grid">
+    <div class="intro-card">
+      <div class="intro-card-title">Desarrollo de Software</div>
+      <p class="intro-card-text">Creamos soluciones digitales a medida, desde aplicaciones web y móviles hasta sistemas empresariales complejos. Trabajamos con metodologías ágiles y tecnologías de vanguardia para entregar productos robustos y escalables.</p>
+    </div>
+    <div class="intro-card">
+      <div class="intro-card-title">Ciberseguridad</div>
+      <p class="intro-card-text">Protegemos la infraestructura digital de nuestros clientes mediante auditorías de seguridad, pentesting, respuesta ante incidentes y estrategias de defensa proactiva. Somos guardianes de la integridad y confidencialidad de los datos.</p>
+    </div>
+  </div>
+
+  <div class="intro-values">
+    <div class="intro-value">
+      <span class="intro-value-icon">&lt;/&gt;</span>
+      <div class="intro-value-label">Innovación</div>
+    </div>
+    <div class="intro-value">
+      <span class="intro-value-icon" style="color:#0066FF;">&#x1F6E1;</span>
+      <div class="intro-value-label">Seguridad</div>
+    </div>
+    <div class="intro-value">
+      <span class="intro-value-icon" style="color:#fff;font-size:18pt;">&#x2605;</span>
+      <div class="intro-value-label">Excelencia</div>
+    </div>
+  </div>
+
+  <div class="page-number-label">03</div>
+</div>
+
+
+<!-- ============================================================
+     EL LOGOTIPO
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <img class="page-header-logo" src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Apex">
+    <span class="page-header-title">02 — EL LOGOTIPO</span>
+  </div>
+
+  <div class="section-tag">Sección 02</div>
+  <h2 class="section-heading">El Logotipo Completo</h2>
+  <div class="accent-rule"></div>
+
+  <p class="section-lead">
+    El logotipo completo de Apex Dev &amp; Security es la combinación del isotipo (símbolo) y el wordmark (texto). Esta es la versión principal de la marca y debe utilizarse en la mayoría de las aplicaciones corporativas.
+  </p>
+
+  <!-- Logo sobre fondo claro -->
+  <div style="margin-bottom:8px;font-family:'Rajdhani',sans-serif;font-size:8.5pt;font-weight:700;letter-spacing:3px;color:#888;text-transform:uppercase;">Sobre fondo claro</div>
+  <div class="logo-showcase">
+    <img src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Logotipo Apex Dev &amp; Security — Fondo Claro">
+  </div>
+
+  <!-- Logo sobre fondo oscuro -->
+  <div style="margin:14px 0 8px;font-family:'Rajdhani',sans-serif;font-size:8.5pt;font-weight:700;letter-spacing:3px;color:#888;text-transform:uppercase;">Sobre fondo oscuro</div>
+  <div class="logo-showcase logo-showcase-dark">
+    <img src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Logotipo Apex Dev &amp; Security — Fondo Oscuro">
+  </div>
+
+  <!-- Especificaciones -->
+  <div style="margin-top:20px;font-family:'Rajdhani',sans-serif;font-size:11pt;font-weight:700;color:#050914;margin-bottom:10px;">Especificaciones Técnicas</div>
+  <div class="logo-specs-grid">
+    <div class="logo-spec-item">
+      <span class="logo-spec-value">1536 × 1024</span>
+      <span class="logo-spec-label">Resolución Máxima (px)</span>
+    </div>
+    <div class="logo-spec-item">
+      <span class="logo-spec-value">3:2</span>
+      <span class="logo-spec-label">Proporción (ancho:alto)</span>
+    </div>
+    <div class="logo-spec-item">
+      <span class="logo-spec-value">PNG / SVG</span>
+      <span class="logo-spec-label">Formatos Recomendados</span>
+    </div>
+  </div>
+
+  <!-- Zona de despeje -->
+  <div style="margin-top:20px;font-family:'Rajdhani',sans-serif;font-size:11pt;font-weight:700;color:#050914;margin-bottom:8px;">Zona de Despeje Mínima</div>
+  <p style="font-size:9.5pt;color:#555;line-height:1.55;margin-bottom:12px;">Alrededor del logotipo debe existir siempre un espacio libre equivalente a la altura de la letra "A" del wordmark. Ningún elemento externo debe invadir esta zona de seguridad.</p>
+
+  <div class="clearance-diagram">
+    <img src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Zona de despeje" style="max-width:45%;height:auto;padding:20px;background:#f5f7ff;border:2px solid #0066FF;border-radius:4px;display:inline-block;">
+    <div class="clearance-note">Zona de despeje = altura de la letra "A" del logotipo en todos los lados</div>
+  </div>
+
+  <div class="page-number-label">04</div>
+</div>
+
+
+<!-- ============================================================
+     EL ISOTIPO
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <img class="page-header-logo" src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Apex">
+    <span class="page-header-title">03 — EL ISOTIPO</span>
+  </div>
+
+  <div class="section-tag">Sección 03</div>
+  <h2 class="section-heading">El Isotipo</h2>
+  <div class="accent-rule"></div>
+
+  <p class="section-lead">
+    El isotipo es el símbolo visual que representa a Apex Dev &amp; Security de forma independiente. Está diseñado para funcionar como elemento autónomo cuando el espacio o el contexto no permiten el uso del logotipo completo.
+  </p>
+
+  <div class="isotipo-grid">
+    <div class="isotipo-box light">
+      <img src="/home/ubuntu/apex_brand/isotipo_color.png" alt="Isotipo — Fondo Claro">
+      <div class="isotipo-label light-label">Sobre fondo claro</div>
+    </div>
+    <div class="isotipo-box dark">
+      <img src="/home/ubuntu/apex_brand/isotipo_color.png" alt="Isotipo — Fondo Oscuro">
+      <div class="isotipo-label dark">Sobre fondo oscuro</div>
+    </div>
+  </div>
+
+  <div style="margin-top:22px;font-family:'Rajdhani',sans-serif;font-size:11pt;font-weight:700;color:#050914;margin-bottom:12px;">Concepto y Características</div>
+
+  <div class="isotipo-features">
+    <div class="feature-item">
+      <div class="feature-dot"></div>
+      <div class="feature-text">
+        <strong>Sombrero de Hacker</strong>
+        Evoca el mundo del hacking ético y la ciberseguridad, posicionando a Apex como expertos en el campo.
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot"></div>
+      <div class="feature-text">
+        <strong>Gafas Tecnológicas</strong>
+        Representan la visión analítica, el enfoque técnico y la capacidad de ver más allá en el mundo digital.
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot"></div>
+      <div class="feature-text">
+        <strong>Forma Cuadrada 1:1</strong>
+        Proporción perfecta para avatares, favicons, íconos de aplicación y sello de marca.
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot"></div>
+      <div class="feature-text">
+        <strong>Gradientes Dinámicos</strong>
+        Los gradientes de azul eléctrico a cian comunican energía, movimiento y modernidad tecnológica.
+      </div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:12px;">
+    <div class="callout-label">Regla Importante</div>
+    <p class="callout-text">El isotipo puede usarse de manera independiente únicamente cuando la marca ya es reconocida en ese contexto. En comunicaciones dirigidas a nuevos públicos o en presentaciones formales, siempre utilice el logotipo completo.</p>
+  </div>
+
+  <div class="page-number-label">05</div>
+</div>
+
+
+<!-- ============================================================
+     PALETA DE COLORES
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <img class="page-header-logo" src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Apex">
+    <span class="page-header-title">04 — PALETA DE COLORES</span>
+  </div>
+
+  <div class="section-tag">Sección 04</div>
+  <h2 class="section-heading">Paleta de Colores</h2>
+  <div class="accent-rule"></div>
+
+  <p class="section-lead">
+    La paleta cromática de Apex Dev &amp; Security está compuesta por tres colores primarios cuidadosamente seleccionados para proyectar tecnología, confianza y vanguardia. Estos colores deben usarse exclusivamente en las proporciones y contextos aquí definidos.
+  </p>
+
+  <div class="color-swatches">
+    <!-- Azul Eléctrico -->
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: linear-gradient(135deg, #0066FF 0%, #0044cc 100%);"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Azul Eléctrico</div>
+        <div class="swatch-code">
+          <div class="code-row">
+            <span class="code-label">HEX</span>
+            <span class="code-value">#0066FF</span>
+          </div>
+          <div class="code-row">
+            <span class="code-label">RGB</span>
+            <span class="code-value">0, 102, 255</span>
+          </div>
+          <div class="code-row">
+            <span class="code-label">CMYK</span>
+            <span class="code-value">100, 60, 0, 0</span>
+          </div>
+          <div class="code-row">
+            <span class="code-label">HSL</span>
+            <span class="code-value">220°, 100%, 50%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cian Brillante -->
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: linear-gradient(135deg, #00FFFF 0%, #00d4d4 100%);"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Cian Brillante</div>
+        <div class="swatch-code">
+          <div class="code-row">
+            <span class="code-label">HEX</span>
+            <span class="code-value">#00FFFF</span>
+          </div>
+          <div class="code-row">
+            <span class="code-label">RGB</span>
+            <span class="code-value">0, 255, 255</span>
+          </div>
+          <div class="code-row">
+            <span class="code-label">CMYK</span>
+            <span class="code-value">100, 0, 0, 0</span>
+          </div>
+          <div class="code-row">
+            <span class="code-label">HSL</span>
+            <span class="code-value">180°, 100%, 50%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Negro Profundo -->
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: linear-gradient(135deg, #1a1a2e 0%, #000000 100%);"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Negro Profundo</div>
+        <div class="swatch-code">
+          <div class="code-row">
+            <span class="code-label">HEX</span>
+            <span class="code-value">#000000</span>
+          </div>
+          <div class="code-row">
+            <span class="code-label">RGB</span>
+            <span class="code-value">0, 0, 0</span>
+          </div>
+          <div class="code-row">
+            <span class="code-label">CMYK</span>
+            <span class="code-value">0, 0, 0, 100</span>
+          </div>
+          <div class="code-row">
+            <span class="code-label">HSL</span>
+            <span class="code-value">0°, 0%, 0%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table class="color-usage-table">
+    <thead>
+      <tr>
+        <th style="width:20px;"></th>
+        <th>Color</th>
+        <th>Rol en la Marca</th>
+        <th>Aplicaciones Principales</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="color-dot" style="background:#0066FF;"></span></td>
+        <td><strong>Azul Eléctrico</strong></td>
+        <td>Color primario / identitario</td>
+        <td>CTAs, encabezados, elementos interactivos, bordes de acento, logotipo</td>
+      </tr>
+      <tr>
+        <td><span class="color-dot" style="background:#00FFFF;border-color:#aaa;"></span></td>
+        <td><strong>Cian Brillante</strong></td>
+        <td>Color de acento / énfasis</td>
+        <td>Detalles de interfaz, íconos, gradientes, highlights, separadores decorativos</td>
+      </tr>
+      <tr>
+        <td><span class="color-dot" style="background:#000000;"></span></td>
+        <td><strong>Negro Profundo</strong></td>
+        <td>Color base / fondos</td>
+        <td>Fondos oscuros, textos sobre fondos claros, fondos de tarjetas premium</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-number-label">06</div>
+</div>
+
+
+<!-- ============================================================
+     TIPOGRAFÍAS
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <img class="page-header-logo" src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Apex">
+    <span class="page-header-title">05 — TIPOGRAFÍAS</span>
+  </div>
+
+  <div class="section-tag">Sección 05</div>
+  <h2 class="section-heading">Tipografías Corporativas</h2>
+  <div class="accent-rule"></div>
+
+  <p class="section-lead">
+    El sistema tipográfico de Apex Dev &amp; Security combina tres familias de fuentes que trabajan en armonía para comunicar diferentes niveles de información: desde titulares impactantes hasta código técnico.
+  </p>
+
+  <!-- Rajdhani -->
+  <div class="typo-section">
+    <div class="typo-header">
+      <div>
+        <div class="typo-role">Tipografía Principal — Títulos y Encabezados</div>
+        <div class="typo-name">Rajdhani</div>
+      </div>
+    </div>
+    <div class="typo-body">
+      <p class="typo-sample-heading" style="font-size:28pt;">Apex Dev &amp; Security</p>
+      <p class="typo-sample-heading" style="font-size:18pt;">Desarrollo · Seguridad · Innovación</p>
+      <p class="typo-sample-heading" style="font-size:13pt;color:#555;font-weight:500;">ABCDEFGHIJKLMNOPQRSTUVWXYZ &nbsp; 0123456789</p>
+      <div class="typo-sizes">
+        <div class="typo-size-item"><span class="typo-size-label">36pt</span><span class="typo-size-name">Hero / Cover</span></div>
+        <div class="typo-size-item"><span class="typo-size-label">24pt</span><span class="typo-size-name">Sección H1</span></div>
+        <div class="typo-size-item"><span class="typo-size-label">16pt</span><span class="typo-size-name">Subtítulo H2</span></div>
+        <div class="typo-size-item"><span class="typo-size-label">12pt</span><span class="typo-size-name">Encabezado H3</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inter -->
+  <div class="typo-section">
+    <div class="typo-header" style="background:#0066FF;">
+      <div>
+        <div class="typo-role">Tipografía Secundaria — Textos y Cuerpo</div>
+        <div class="typo-name">Inter</div>
+      </div>
+    </div>
+    <div class="typo-body">
+      <p class="typo-sample-body" style="font-size:12pt;">Apex Dev &amp; Security — Soluciones Tecnológicas</p>
+      <p class="typo-sample-body">En Apex Dev &amp; Security trabajamos con las tecnologías más avanzadas del mercado para brindar soluciones de desarrollo de software y ciberseguridad que superan las expectativas de nuestros clientes. Nuestra filosofía combina rigor técnico con creatividad.</p>
+      <div class="typo-sizes" style="margin-top:10px;">
+        <div class="typo-size-item"><span class="typo-size-label">14pt</span><span class="typo-size-name">Lead / Intro</span></div>
+        <div class="typo-size-item"><span class="typo-size-label">11pt</span><span class="typo-size-name">Cuerpo</span></div>
+        <div class="typo-size-item"><span class="typo-size-label">10pt</span><span class="typo-size-name">Secundario</span></div>
+        <div class="typo-size-item"><span class="typo-size-label">8pt</span><span class="typo-size-name">Pie / Legal</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JetBrains Mono -->
+  <div class="typo-section">
+    <div class="typo-header" style="background:#001440;">
+      <div>
+        <div class="typo-role">Tipografía Técnica — Código y Datos</div>
+        <div class="typo-name">JetBrains Mono</div>
+      </div>
+    </div>
+    <div class="typo-body">
+      <p class="typo-sample-mono">$ apex-cli --scan --target 192.168.1.0/24 --output report.json</p>
+      <p class="typo-sample-mono">const apexSecurity = new Apex&#123; mode: 'pentest', verbose: true &#125;;</p>
+      <p class="typo-sample-mono">#0066FF · #00FFFF · #000000 · RGB(0, 102, 255)</p>
+    </div>
+  </div>
+
+  <div class="page-number-label">07</div>
+</div>
+
+
+<!-- ============================================================
+     VERSIONES DEL LOGO
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <img class="page-header-logo" src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Apex">
+    <span class="page-header-title">06 — VERSIONES DEL LOGO</span>
+  </div>
+
+  <div class="section-tag">Sección 06</div>
+  <h2 class="section-heading">Versiones del Logo</h2>
+  <div class="accent-rule"></div>
+
+  <p class="section-lead">
+    Apex Dev &amp; Security cuenta con cinco versiones oficiales del logo, diseñadas para adaptarse a distintos contextos, fondos y restricciones de producción. Siempre debe utilizarse la versión que mejor garantice visibilidad y legibilidad.
+  </p>
+
+  <div class="versions-grid">
+    <!-- Logotipo color claro -->
+    <div class="version-card">
+      <div class="version-preview light-bg">
+        <img src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Logotipo Color">
+      </div>
+      <div class="version-info">
+        <div class="version-title">Logotipo Color — Fondo Claro</div>
+        <p class="version-desc">Versión principal. Para uso digital, presentaciones y documentos sobre fondos claros o blancos. Es la versión preferida para la mayoría de las aplicaciones.</p>
+      </div>
+    </div>
+
+    <!-- Logotipo color oscuro -->
+    <div class="version-card">
+      <div class="version-preview dark-bg">
+        <img src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Logotipo Color Oscuro">
+      </div>
+      <div class="version-info">
+        <div class="version-title">Logotipo Color — Fondo Oscuro</div>
+        <p class="version-desc">Misma versión a color utilizada sobre fondos oscuros o negros. Los colores originales del logo mantienen alto contraste en este contexto.</p>
+      </div>
+    </div>
+
+    <!-- Logotipo B/N -->
+    <div class="version-card">
+      <div class="version-preview white-bg">
+        <img src="/home/ubuntu/apex_brand/logotipo_completo_bn.png" alt="Logotipo Blanco y Negro">
+      </div>
+      <div class="version-info">
+        <div class="version-title">Logotipo Blanco y Negro</div>
+        <p class="version-desc">Para impresiones monocromáticas, fotocopias, sellos y contextos donde el color no está disponible. Alto contraste garantizado.</p>
+      </div>
+    </div>
+
+    <!-- Logotipo monocromático -->
+    <div class="version-card">
+      <div class="version-preview mid-bg">
+        <img src="/home/ubuntu/apex_brand/logotipo_monocromatico.png" alt="Logotipo Monocromático">
+      </div>
+      <div class="version-info">
+        <div class="version-title">Logotipo Monocromático</div>
+        <p class="version-desc">Versión de un solo color en azul eléctrico (#0066FF). Para fondos corporativos, aplicaciones especiales y alternativa elegante al logotipo a color completo.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Isotipo versiones -->
+  <div style="margin-top:22px;font-family:'Rajdhani',sans-serif;font-size:11pt;font-weight:700;color:#050914;margin-bottom:10px;">Versiones del Isotipo</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+    <div style="text-align:center;background:#f5f7ff;border-radius:8px;padding:16px;border:1px solid #e0e8ff;">
+      <img src="/home/ubuntu/apex_brand/isotipo_color.png" style="width:56px;height:56px;object-fit:contain;" alt="Isotipo Color">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:8pt;color:#555;margin-top:8px;letter-spacing:1px;">COLOR</div>
+    </div>
+    <div style="text-align:center;background:#050914;border-radius:8px;padding:16px;border:1px solid rgba(0,102,255,0.3);">
+      <img src="/home/ubuntu/apex_brand/isotipo_color.png" style="width:56px;height:56px;object-fit:contain;" alt="Isotipo Color Oscuro">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:8pt;color:rgba(255,255,255,0.4);margin-top:8px;letter-spacing:1px;">SOBRE OSCURO</div>
+    </div>
+    <div style="text-align:center;background:#fff;border-radius:8px;padding:16px;border:1px solid #e5e5e5;">
+      <img src="/home/ubuntu/apex_brand/isotipo_bn.png" style="width:56px;height:56px;object-fit:contain;" alt="Isotipo B/N">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:8pt;color:#555;margin-top:8px;letter-spacing:1px;">BLANCO Y NEGRO</div>
+    </div>
+    <div style="text-align:center;background:#e8eaf0;border-radius:8px;padding:16px;border:1px solid #d5d8e5;">
+      <img src="/home/ubuntu/apex_brand/isotipo_bn.png" style="width:56px;height:56px;object-fit:contain;" alt="Isotipo Gris">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:8pt;color:#555;margin-top:8px;letter-spacing:1px;">SOBRE GRIS</div>
+    </div>
+  </div>
+
+  <div class="page-number-label">08</div>
+</div>
+
+
+<!-- ============================================================
+     USOS CORRECTOS
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <img class="page-header-logo" src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Apex">
+    <span class="page-header-title">07 — USOS CORRECTOS</span>
+  </div>
+
+  <div class="section-tag">Sección 07</div>
+  <h2 class="section-heading">Usos Correctos</h2>
+  <div class="accent-rule"></div>
+
+  <p class="section-lead">
+    Para preservar la integridad y coherencia de la marca Apex Dev &amp; Security, es fundamental seguir estas pautas de uso correcto. La correcta aplicación del logo en todos los materiales refuerza el reconocimiento y la credibilidad de la marca.
+  </p>
+
+  <div class="check-item correct">
+    <span class="check-icon correct">&#10003;</span>
+    <div class="check-text"><strong>Usar el logotipo a color completo sobre fondos claros</strong>Cuando el fondo sea blanco o de colores claros, utilice siempre el logotipo en su versión a color original. Es la presentación más impactante y representativa de la marca.</div>
+  </div>
+
+  <div class="check-item correct">
+    <span class="check-icon correct">&#10003;</span>
+    <div class="check-text"><strong>Usar el logotipo a color sobre fondos oscuros o negros</strong>El logotipo a color mantiene excelente legibilidad sobre fondos oscuros. Esta combinación es ideal para materiales premium y tecnológicos.</div>
+  </div>
+
+  <div class="check-item correct">
+    <span class="check-icon correct">&#10003;</span>
+    <div class="check-text"><strong>Respetar la zona de despeje en todos los contextos</strong>Mantenga siempre el espacio libre alrededor del logo equivalente a la altura de la "A" del wordmark. Esto garantiza que el logo "respire" y sea siempre claramente visible.</div>
+  </div>
+
+  <div class="check-item correct">
+    <span class="check-icon correct">&#10003;</span>
+    <div class="check-text"><strong>Usar la versión B/N para impresiones monocromáticas</strong>En documentos impresos en blanco y negro, fotocopias y sellos, utilice exclusivamente la versión monocromática del logo para garantizar máximo contraste y legibilidad.</div>
+  </div>
+
+  <div class="check-item correct">
+    <span class="check-icon correct">&#10003;</span>
+    <div class="check-text"><strong>Escalar el logo proporcionalmente desde el centro</strong>Al redimensionar el logo, siempre mantenga su proporción original bloqueando el aspecto ratio. Nunca estire ni comprima independientemente algún eje.</div>
+  </div>
+
+  <div class="check-item correct">
+    <span class="check-icon correct">&#10003;</span>
+    <div class="check-text"><strong>Usar el isotipo de forma independiente en contextos apropiados</strong>El isotipo puede usarse solo en favicons, avatares, badges e íconos donde el espacio es reducido y la marca ya es conocida.</div>
+  </div>
+
+  <div class="callout" style="margin-top: 12px;">
+    <div class="callout-label">Principio Rector</div>
+    <p class="callout-text">Cualquier uso del logo que no esté explícitamente contemplado en esta guía debe consultar con el equipo de diseño de Apex Dev &amp; Security antes de proceder. Cuando exista duda, siempre prevalece la versión más conservadora y legible.</p>
+  </div>
+
+  <div class="page-number-label">09</div>
+</div>
+
+
+<!-- ============================================================
+     USOS INCORRECTOS
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <img class="page-header-logo" src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Apex">
+    <span class="page-header-title">08 — USOS INCORRECTOS</span>
+  </div>
+
+  <div class="section-tag">Sección 08</div>
+  <h2 class="section-heading">Usos Incorrectos</h2>
+  <div class="accent-rule"></div>
+
+  <p class="section-lead">
+    Los siguientes ejemplos ilustran las formas en que <strong>NO debe utilizarse</strong> el logo de Apex Dev &amp; Security. Estas acciones distorsionan la identidad visual, dañan la percepción de la marca y están explícitamente prohibidas.
+  </p>
+
+  <!-- Ejemplos visuales de uso incorrecto -->
+  <div class="incorrect-examples">
+    <!-- Estirado -->
+    <div class="incorrect-card">
+      <div class="incorrect-preview stretched">
+        <img src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Logo estirado">
+        <span class="incorrect-x">&#10007;</span>
+      </div>
+      <div class="incorrect-label">Estirar o distorsionar</div>
+    </div>
+    <!-- Rotado -->
+    <div class="incorrect-card">
+      <div class="incorrect-preview rotated">
+        <img src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Logo rotado">
+        <span class="incorrect-x">&#10007;</span>
+      </div>
+      <div class="incorrect-label">Rotar el logotipo</div>
+    </div>
+    <!-- Pixelado / muy pequeño -->
+    <div class="incorrect-card">
+      <div class="incorrect-preview pixelated">
+        <img src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Logo pixelado">
+        <span class="incorrect-x">&#10007;</span>
+      </div>
+      <div class="incorrect-label">Usar en baja resolución</div>
+    </div>
+    <!-- Bajo contraste -->
+    <div class="incorrect-card">
+      <div class="incorrect-preview low-contrast">
+        <img src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Logo bajo contraste">
+        <span class="incorrect-x">&#10007;</span>
+      </div>
+      <div class="incorrect-label">Fondo sin contraste</div>
+    </div>
+    <!-- Con borde/marco -->
+    <div class="incorrect-card">
+      <div class="incorrect-preview framed">
+        <img src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Logo con marco">
+        <span class="incorrect-x">&#10007;</span>
+      </div>
+      <div class="incorrect-label">Añadir marcos o bordes</div>
+    </div>
+    <!-- Color incorrecto -->
+    <div class="incorrect-card">
+      <div class="incorrect-preview" style="background:#fff;filter:sepia(100%) hue-rotate(60deg);">
+        <img src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Logo color incorrecto">
+        <span class="incorrect-x">&#10007;</span>
+      </div>
+      <div class="incorrect-label">Cambiar los colores</div>
+    </div>
+  </div>
+
+  <!-- Lista de prohibiciones -->
+  <div style="margin-top:20px;">
+    <div class="check-item wrong">
+      <span class="check-icon wrong">&#10007;</span>
+      <div class="check-text"><strong>No distorsionar las proporciones</strong>Nunca estire o comprima el logo en un solo eje. Siempre escale manteniendo el aspecto ratio original bloqueado.</div>
+    </div>
+    <div class="check-item wrong">
+      <span class="check-icon wrong">&#10007;</span>
+      <div class="check-text"><strong>No rotar ni inclinar el logotipo</strong>El logo siempre debe aparecer en posición horizontal, alineado y sin ningún tipo de rotación o inclinación.</div>
+    </div>
+    <div class="check-item wrong">
+      <span class="check-icon wrong">&#10007;</span>
+      <div class="check-text"><strong>No aplicar efectos, sombras o filtros</strong>No agregue sombras, brillos, relieves, contornos, filtros de color u otros efectos visuales sobre el logo.</div>
+    </div>
+    <div class="check-item wrong">
+      <span class="check-icon wrong">&#10007;</span>
+      <div class="check-text"><strong>No modificar ni reemplazar los colores de marca</strong>Los colores del logo son parte integral de la identidad. No los cambie, mezcle con paletas externas ni aplique tintes parciales.</div>
+    </div>
+    <div class="check-item wrong">
+      <span class="check-icon wrong">&#10007;</span>
+      <div class="check-text"><strong>No usar el logo sobre fondos que reduzcan el contraste</strong>Evite colocar el logo sobre fotografías complejas, texturas o colores que compitan visualmente con el logo y reduzcan su legibilidad.</div>
+    </div>
+  </div>
+
+  <div class="page-number-label">10</div>
+</div>
+
+
+<!-- ============================================================
+     APLICACIONES
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <img class="page-header-logo" src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Apex">
+    <span class="page-header-title">09 — APLICACIONES</span>
+  </div>
+
+  <div class="section-tag">Sección 09</div>
+  <h2 class="section-heading">Aplicaciones de Marca</h2>
+  <div class="accent-rule"></div>
+
+  <p class="section-lead">
+    A continuación se presentan mockups que ilustran cómo debe aplicarse la identidad visual de Apex Dev &amp; Security en los principales puntos de contacto con clientes y aliados.
+  </p>
+
+  <!-- Tarjeta de presentación -->
+  <div style="font-family:'Rajdhani',sans-serif;font-size:11pt;font-weight:700;color:#050914;margin-bottom:14px;">Tarjeta de Presentación</div>
+
+  <div class="bizcard-container">
+    <!-- Frente -->
+    <div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:8pt;color:#888;letter-spacing:2px;margin-bottom:8px;text-align:center;">FRENTE</div>
+      <div class="bizcard front">
+        <div class="bizcard-grid"></div>
+        <div class="bizcard-line"></div>
+        <div class="bizcard-content">
+          <img class="bizcard-logo" src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Apex Logo">
+          <div>
+            <div class="bizcard-name">Carlos Martínez</div>
+            <div class="bizcard-role">CYBERSECURITY ENGINEER</div>
+          </div>
+          <div class="bizcard-contact">
+            carlos@apexdevsec.com<br>
+            +58 212 555 0100<br>
+            apexdevsec.com
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Reverso -->
+    <div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:8pt;color:#888;letter-spacing:2px;margin-bottom:8px;text-align:center;">REVERSO</div>
+      <div class="bizcard back">
+        <div class="bizcard-grid"></div>
+        <div class="bizcard-line"></div>
+        <div class="bizcard-back-content">
+          <img class="bizcard-back-logo" src="/home/ubuntu/apex_brand/isotipo_color.png" alt="Apex Isotipo">
+        </div>
+      </div>
+    </div>
+    <!-- Medidas -->
+    <div style="align-self:center;padding-left:8px;">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:9.5pt;font-weight:700;color:#050914;margin-bottom:10px;">Especificaciones</div>
+      <div style="font-size:8.5pt;color:#555;line-height:1.8;">
+        <strong>Tamaño:</strong> 90 × 55 mm<br>
+        <strong>Papel:</strong> Couché 350gr<br>
+        <strong>Acabado:</strong> Barniz UV<br>
+        <strong>Colores:</strong> CMYK + Spot<br>
+        <strong>Bordes:</strong> Redondeados 3mm<br>
+        <strong>Fondo:</strong> Negro profundo<br>
+        <strong>Acento:</strong> Azul eléctrico
+      </div>
+    </div>
+  </div>
+
+  <!-- Membrete / Papelería -->
+  <div style="font-family:'Rajdhani',sans-serif;font-size:11pt;font-weight:700;color:#050914;margin-top:22px;margin-bottom:12px;">Membrete Corporativo</div>
+
+  <div class="two-col" style="align-items:start;">
+    <div class="letterhead-mockup">
+      <div class="letterhead-header">
+        <img src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Apex">
+        <span class="letterhead-header-line">apexdevsec.com</span>
+      </div>
+      <div class="letterhead-body">
+        <div class="letterhead-date">Caracas, 23 de junio de 2026</div>
+        <div class="letterhead-text-line short"></div>
+        <div class="letterhead-text-line medium"></div>
+        <div class="letterhead-text-line long"></div>
+        <div class="letterhead-text-line long"></div>
+        <div class="letterhead-text-line medium"></div>
+        <div class="letterhead-text-line long"></div>
+        <div class="letterhead-text-line short"></div>
+        <div class="letterhead-text-line long"></div>
+        <div class="letterhead-text-line medium"></div>
+      </div>
+      <div class="letterhead-footer"></div>
+    </div>
+    <div>
+      <div style="font-size:9.5pt;color:#444;line-height:1.65;margin-bottom:14px;">
+        El membrete corporativo utiliza el logotipo completo en la cabecera sobre fondo oscuro (#050914), creando un contraste elegante. El pie de página lleva una línea degradada en los colores primarios de la marca.
+      </div>
+      <div style="font-size:8.5pt;color:#555;line-height:1.8;">
+        <strong>Papel:</strong> Bond 90gr A4<br>
+        <strong>Impresión:</strong> Offset 4 colores<br>
+        <strong>Header:</strong> Negro + Logotipo color<br>
+        <strong>Footer:</strong> Degradado #0066FF → #00FFFF<br>
+        <strong>Tipografía:</strong> Inter 10pt
+      </div>
+    </div>
+  </div>
+
+  <div class="page-number-label">11</div>
+</div>
+
+
+<!-- ============================================================
+     APLICACIONES 2 — WEB
+     ============================================================ -->
+<div class="page">
+  <div class="page-header">
+    <img class="page-header-logo" src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Apex">
+    <span class="page-header-title">09 — APLICACIONES DIGITALES</span>
+  </div>
+
+  <div class="section-tag">Sección 09 — Continuación</div>
+  <h2 class="section-heading">Aplicaciones Digitales</h2>
+  <div class="accent-rule"></div>
+
+  <!-- Web Mockup -->
+  <div style="font-family:'Rajdhani',sans-serif;font-size:11pt;font-weight:700;color:#050914;margin-bottom:12px;">Sitio Web — Header y Hero Section</div>
+
+  <div class="web-mockup">
+    <div class="web-browser-bar">
+      <div class="web-dot red"></div>
+      <div class="web-dot yellow"></div>
+      <div class="web-dot green"></div>
+      <div class="web-url">https://apexdevsec.com</div>
+    </div>
+    <div class="web-nav">
+      <img src="/home/ubuntu/apex_brand/logotipo_completo_color.png" alt="Apex Logo" style="height:18px;width:auto;">
+      <div class="web-nav-items">
+        <span class="web-nav-item active">Inicio</span>
+        <span class="web-nav-item">Servicios</span>
+        <span class="web-nav-item">Seguridad</span>
+        <span class="web-nav-item">Proyectos</span>
+        <span class="web-nav-item">Contacto</span>
+      </div>
+      <span class="web-cta">Consulta Gratis</span>
+    </div>
+    <div class="web-hero">
+      <div class="web-hero-grid"></div>
+      <div class="web-hero-content">
+        <div class="web-hero-title">Desarrollo y <span>Seguridad</span><br>Sin Compromisos</div>
+        <div class="web-hero-sub">Soluciones tecnológicas de alto rendimiento · Ciberseguridad avanzada · Resultados medibles</div>
+        <span class="web-hero-btn">Explorar Servicios &#8594;</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Redes Sociales -->
+  <div style="font-family:'Rajdhani',sans-serif;font-size:11pt;font-weight:700;color:#050914;margin-top:22px;margin-bottom:12px;">Presencia en Redes Sociales</div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+    <!-- Avatar -->
+    <div style="text-align:center;">
+      <div style="width:72px;height:72px;border-radius:50%;background:#050914;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;border:2px solid #0066FF;overflow:hidden;">
+        <img src="/home/ubuntu/apex_brand/isotipo_color.png" style="width:50px;height:50px;object-fit:contain;" alt="Avatar">
+      </div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:8.5pt;font-weight:700;color:#050914;">Avatar / Perfil</div>
+      <div style="font-size:7.5pt;color:#888;">400 × 400 px</div>
+    </div>
+    <!-- Banner LinkedIn -->
+    <div style="text-align:center;grid-column:span 3;">
+      <div style="height:60px;background:linear-gradient(135deg,#000814 0%,#001440 60%,#000814 100%);border-radius:6px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;margin-bottom:8px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;width:100%;height:100%;background-image:linear-gradient(rgba(0,102,255,0.07) 1px,transparent 1px),linear-gradient(90deg,rgba(0,102,255,0.07) 1px,transparent 1px);background-size:18px 18px;"></div>
+        <img src="/home/ubuntu/apex_brand/logotipo_completo_color.png" style="height:26px;width:auto;position:relative;z-index:1;" alt="Banner Logo">
+        <div style="position:relative;z-index:1;text-align:right;">
+          <div style="font-family:'Rajdhani',sans-serif;font-size:9pt;font-weight:600;color:#00FFFF;letter-spacing:1px;">Desarrollo · Seguridad · Innovación</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7pt;color:rgba(255,255,255,0.4);">apexdevsec.com</div>
+        </div>
+      </div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:8.5pt;font-weight:700;color:#050914;">Banner LinkedIn / Twitter</div>
+      <div style="font-size:7.5pt;color:#888;">1584 × 396 px</div>
+    </div>
+  </div>
+
+  <!-- Firma de email -->
+  <div style="font-family:'Rajdhani',sans-serif;font-size:11pt;font-weight:700;color:#050914;margin-top:22px;margin-bottom:12px;">Firma de Correo Electrónico</div>
+
+  <div style="border:1px solid #e5e5e5;border-radius:8px;overflow:hidden;">
+    <div style="background:#fff;padding:16px 20px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;">
+      <img src="/home/ubuntu/apex_brand/isotipo_color.png" style="width:48px;height:48px;object-fit:contain;" alt="Isotipo">
+      <div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:12pt;font-weight:700;color:#050914;">Carlos Martínez</div>
+        <div style="font-family:'Inter',sans-serif;font-size:8.5pt;color:#0066FF;font-weight:500;">Cybersecurity Engineer · Apex Dev &amp; Security</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:7.5pt;color:#888;margin-top:4px;line-height:1.7;">
+          carlos@apexdevsec.com &nbsp;|&nbsp; +58 212 555 0100 &nbsp;|&nbsp; apexdevsec.com
+        </div>
+      </div>
+    </div>
+    <div style="height:3px;background:linear-gradient(90deg,#0066FF,#00FFFF);"></div>
+  </div>
+
+  <div class="callout" style="margin-top:22px;">
+    <div class="callout-label">Consistencia Digital</div>
+    <p class="callout-text">En todas las aplicaciones digitales, el fondo oscuro (#050914 o #000000) debe ser el estándar para las secciones principales. El azul eléctrico se reserva para CTAs y elementos interactivos. El cian se usa únicamente como acento tipográfico y decorativo.</p>
+  </div>
+
+  <div class="page-number-label">12</div>
+</div>
+
+
+<!-- ============================================================
+     CIERRE / CONTRAPORTADA
+     ============================================================ -->
+<div class="cover" style="page-break-before:always;justify-content:flex-end;padding-bottom:0;">
+  <div class="cover-bg-grid"></div>
+  <div class="cover-glow-top" style="top:auto;bottom:-80px;left:50%;"></div>
+  <div class="cover-glow-bottom" style="bottom:auto;top:-80px;right:-80px;background:radial-gradient(circle,rgba(0,102,255,0.25) 0%,transparent 70%);"></div>
+  <div class="cover-line-top"></div>
+
+  <div class="cover-content" style="margin-bottom:60px;">
+    <img class="cover-logo-img" src="/home/ubuntu/apex_brand/isotipo_color.png" alt="Apex Isotipo" style="width:100px;margin-bottom:28px;">
+    <div class="cover-label" style="margin-bottom:10px;">Apex Dev &amp; Security</div>
+    <div class="cover-title" style="font-size:22pt;">Guía de Marca Oficial</div>
+    <div class="cover-divider"></div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:8.5pt;color:rgba(255,255,255,0.4);line-height:2;">
+      Versión 1.0 &nbsp;·&nbsp; Junio 2026<br>
+      Todos los derechos reservados<br>
+      apexdevsec.com
+    </div>
+    <div style="margin-top:28px;display:flex;justify-content:center;gap:18px;">
+      <div style="text-align:center;">
+        <div style="width:32px;height:32px;border-radius:50%;background:#0066FF;margin:0 auto 6px;"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:6.5pt;color:rgba(255,255,255,0.4);">#0066FF</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="width:32px;height:32px;border-radius:50%;background:#00FFFF;margin:0 auto 6px;"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:6.5pt;color:rgba(255,255,255,0.4);">#00FFFF</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="width:32px;height:32px;border-radius:50%;background:#000000;border:1px solid rgba(255,255,255,0.15);margin:0 auto 6px;"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:6.5pt;color:rgba(255,255,255,0.4);">#000000</div>
+      </div>
+    </div>
+  </div>
+  <div class="cover-line-bottom"></div>
+</div>
+
+</body>
+</html>
